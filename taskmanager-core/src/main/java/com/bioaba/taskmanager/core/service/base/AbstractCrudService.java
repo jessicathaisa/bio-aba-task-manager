@@ -20,5 +20,8 @@ public abstract class AbstractCrudService<T> {
 		return repository.findAll();
 	}
 
-	
+	public T save( T entity){
+		repository.save(entity);
+		return entity;
+	}
 }

@@ -14,4 +14,9 @@ public class AbstractCrudFacade<T> {
 	public List<T> list() {
 		return this.abstractCrud.list();
 	}
+	
+	public T save (T entity){
+		abstractCrud.save(entity);
+		return entity;
+	}
 }

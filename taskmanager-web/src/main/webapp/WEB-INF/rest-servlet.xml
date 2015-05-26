@@ -5,6 +5,7 @@
 
     <context:component-scan base-package="com.bioaba.taskmanager.web.controller"/>
     <context:component-scan base-package="com.bioaba.taskmanager.web.validation"/>
+    <context:component-scan base-package="com.bioaba.taskmanager.web.filter"/>
     
     <mvc:annotation-driven />
     

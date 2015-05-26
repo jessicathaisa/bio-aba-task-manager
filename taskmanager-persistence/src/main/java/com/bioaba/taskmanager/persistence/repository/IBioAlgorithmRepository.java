@@ -3,9 +3,9 @@ package com.bioaba.taskmanager.persistence.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bioaba.taskmanager.persistence.entity.BioDatabase;
+import com.bioaba.taskmanager.persistence.entity.BioAlgorithm;
 
 @Repository
-public interface IBioDatabaseRepository extends JpaRepository<BioDatabase, Long>{
-
+public interface IBioAlgorithmRepository extends JpaRepository<BioAlgorithm, Long>{
+	
 }

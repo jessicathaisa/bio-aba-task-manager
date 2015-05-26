@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,7 +19,9 @@ public class BioAlgorithm {
 	
 	private String name;
 	
-	@ElementCollection
+	private String provider;
+	
+	@ElementCollection(fetch=FetchType.EAGER)
 	private List<String> allowedFormats;
 	
 	private String url;
@@ -63,5 +66,19 @@ public class BioAlgorithm {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the provider
+	 */
+	public String getProvider() {
+		return provider;
+	}
+
+	/**
+	 * @param provider the provider to set
+	 */
+	public void setProvider(String provider) {
+		this.provider = provider;
 	}
 }
