@@ -1,12 +1,15 @@
 package com.bioaba.taskmanager.persistence.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +20,7 @@ public class BioAlgorithm {
 	@GeneratedValue
 	private Long id;
 	
+	@Column(nullable=false)
 	private String name;
 	
 	private String provider;
@@ -24,9 +28,17 @@ public class BioAlgorithm {
 	@ElementCollection(fetch=FetchType.EAGER)
 	private List<String> allowedFormats;
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	private List<BioAlgoParameter> parameters;
+	
+	@Column(nullable=false)
 	private String url;
 	
+	@Column(nullable=false)
 	private String description ;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	private BioAlgorithmClassification classification;
 
 	public Long getId() {
 		return id;
@@ -52,6 +64,14 @@ public class BioAlgorithm {
 		this.allowedFormats = allowedFormats;
 	}
 
+	public List<BioAlgoParameter> getParameters() {
+		return parameters != null ? parameters : new ArrayList<BioAlgoParameter>();
+	}
+
+	public void setParameters(List<BioAlgoParameter> parameters) {
+		this.parameters = parameters;
+	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -68,17 +88,19 @@ public class BioAlgorithm {
 		this.description = description;
 	}
 
-	/**
-	 * @return the provider
-	 */
 	public String getProvider() {
 		return provider;
 	}
 
-	/**
-	 * @param provider the provider to set
-	 */
 	public void setProvider(String provider) {
 		this.provider = provider;
+	}
+
+	public BioAlgorithmClassification getClassification() {
+		return classification;
+	}
+
+	public void setClassification(BioAlgorithmClassification classification) {
+		this.classification = classification;
 	}
 }

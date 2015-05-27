@@ -1,11 +1,17 @@
 package com.bioaba.taskmanager.core.service.algorithmClients;
 
+
 public class AlgorithmParameter {
 
 	private String paramName;
 	
-	private Object paramValue;
+	private String paramValue;
 
+	public AlgorithmParameter(String paramName, String paramValue) {
+		this.paramName = paramName;
+		this.paramValue = paramValue;
+	}
+	
 	public String getParamName() {
 		return paramName;
 	}
@@ -14,11 +20,11 @@ public class AlgorithmParameter {
 		this.paramName = paramName;
 	}
 
-	public Object getParamValue() {
+	public String getParamValue() {
 		return paramValue;
 	}
 
-	public void setParamValue(Object paramValue) {
+	public void setParamValue(String paramValue) {
 		this.paramValue = paramValue;
 	}
 }

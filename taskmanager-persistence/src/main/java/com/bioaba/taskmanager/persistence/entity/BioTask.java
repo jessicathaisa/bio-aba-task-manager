@@ -1,8 +1,11 @@
 package com.bioaba.taskmanager.persistence.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,6 +24,9 @@ public class BioTask {
 
 	@Column(unique = true)
 	private String taskKey;
+	
+	@Column(nullable=false)
+	private String query;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_database")
@@ -29,6 +35,17 @@ public class BioTask {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_algoritm")
 	private BioAlgorithm algorithm;
+
+	@ElementCollection(fetch=FetchType.EAGER)
+	private List<BioTaskParameter> parameters;
+
+	public List<BioTaskParameter> getParameters() {
+		return parameters != null ? parameters : new ArrayList<BioTaskParameter>();
+	}
+
+	public void setParameters(List<BioTaskParameter> parameters) {
+		this.parameters = parameters;
+	}
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_status")
@@ -46,6 +63,14 @@ public class BioTask {
 
 	public String getTaskKey() {
 		return taskKey;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 	public BioAlgorithm getAlgorithm() {

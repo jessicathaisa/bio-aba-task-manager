@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 
 import com.bioaba.taskmanager.core.events.BioTaskSavedEvent;
 import com.bioaba.taskmanager.core.facade.base.AbstractCrudFacade;
+import com.bioaba.taskmanager.core.service.BioTaskParameterService;
 import com.bioaba.taskmanager.core.service.BioTaskService;
 import com.bioaba.taskmanager.core.service.BioTaskStatusService;
 import com.bioaba.taskmanager.persistence.entity.BioTask;
+import com.bioaba.taskmanager.persistence.entity.BioTaskParameter;
 import com.bioaba.taskmanager.persistence.entity.BioTaskStatus;
 
 @Component
@@ -20,6 +22,8 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 
 	private BioTaskService taskService;
 
+	@Inject
+	private BioTaskParameterService taskParameterService;
 	@Inject
 	private BioTaskStatusService taskStatusService;
 	
@@ -34,6 +38,8 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 	
 	@Override
 	public BioTask save(BioTask entity) {
+		for(BioTaskParameter param : entity.getParameters())
+			taskParameterService.save(param);
 		super.save(entity);
 		
 		eventPublisher.publishEvent(new BioTaskSavedEvent(this, entity.getTaskKey()));

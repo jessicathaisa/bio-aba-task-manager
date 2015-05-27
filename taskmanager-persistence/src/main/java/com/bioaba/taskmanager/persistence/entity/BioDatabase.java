@@ -1,5 +1,6 @@
 package com.bioaba.taskmanager.persistence.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,12 +13,16 @@ public class BioDatabase {
 	@GeneratedValue
 	private Long id;
 	
+	@Column(nullable=false)
 	private String name;
 	
+	@Column(nullable=false)
 	private String format;
 	
+	@Column(nullable=false)
 	private String url;
 	
+	@Column(nullable=false)
 	private String description;
 	
 	/**
