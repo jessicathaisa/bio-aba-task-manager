@@ -26,7 +26,7 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 	private BioTaskParameterService taskParameterService;
 	@Inject
 	private BioTaskStatusService taskStatusService;
-	
+
 	@Inject
 	private ApplicationEventPublisher eventPublisher;
 
@@ -35,44 +35,50 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 		super(taskService);
 		this.taskService = taskService;
 	}
-	
+
 	@Override
 	public BioTask save(BioTask entity) {
-		for(BioTaskParameter param : entity.getParameters())
+		for (BioTaskParameter param : entity.getParameters())
 			taskParameterService.save(param);
 		super.save(entity);
-		
-		eventPublisher.publishEvent(new BioTaskSavedEvent(this, entity.getTaskKey()));
+
+		eventPublisher.publishEvent(new BioTaskSavedEvent(this, entity
+				.getTaskKey()));
 		return entity;
 	}
-	
-	public void updateTaskStatusByTaskKey(String taskKey, String taskStatusName){
+
+	public void updateTaskStatusByTaskKey(String taskKey, String taskStatusName) {
 		BioTask biotask = taskService.findByTaskKey(taskKey);
-		if(biotask == null){
+		if (biotask == null) {
 			System.out.println("Lançar erro 404");
 			return;
 		}
-		
+
 		BioTaskStatus taskStatus = taskStatusService.findByName(taskStatusName);
-		if(taskStatus == null){
+		if (taskStatus == null) {
 			System.out.println("Lançar erro 404 também?");
 			return;
 		}
-		
+
 		biotask.setStatus(taskStatus);
 		taskService.save(biotask);
 	}
-	
-	public void runTask(String taskKey){
+
+	public BioTask findByTaskKey(String taskKey) {
+		BioTask task = taskService.findByTaskKey(taskKey);
+		return task;
+	}
+
+	public void runTask(String taskKey) {
 		BioTask task = taskService.findByTaskKey(taskKey);
 		String resourcePath = "";
-		if(task == null){
+		if (task == null) {
 			System.out.println("Lançar erro 404");
 			return;
 		}
 		resourcePath = taskService.submitTask(task);
 		task.setResourcePath(resourcePath);
-		
+
 		taskService.save(task);
 	}
 }

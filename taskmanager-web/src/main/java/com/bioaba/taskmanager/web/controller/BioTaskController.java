@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.bioaba.taskmanager.core.facade.BioTaskFacade;
@@ -32,6 +33,12 @@ public class BioTaskController extends AbstractCrudController<BioTask> {
 	@ExceptionHandler(Exception.class)
 	public void test(Exception ex) {
 		ex.toString();
+	}
+
+	@RequestMapping(value="/{taskKey}", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody BioTask getOne(@PathVariable("taskKey") String taskKey) {
+		return facade.findByTaskKey(taskKey);
 	}
 
 	@RequestMapping(value="/{taskKey}", method = RequestMethod.PUT)

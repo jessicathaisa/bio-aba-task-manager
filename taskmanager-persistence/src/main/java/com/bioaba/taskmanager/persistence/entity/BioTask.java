@@ -28,11 +28,11 @@ public class BioTask {
 	@Column(nullable=false)
 	private String query;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_database")
 	private BioDatabase database;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_algoritm")
 	private BioAlgorithm algorithm;
 
@@ -47,11 +47,21 @@ public class BioTask {
 		this.parameters = parameters;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_status")
 	private BioTaskStatus status;
 	
 	private String resourcePath;
+	
+	private byte[] result;
+
+	public byte[] getResult() {
+		return result;
+	}
+
+	public void setResult(byte[] result) {
+		this.result = result;
+	}
 
 	public Integer getId() {
 		return id;
