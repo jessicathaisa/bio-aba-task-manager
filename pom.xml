@@ -11,10 +11,8 @@
   
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- Configura JDK para versao 1.7, se nao configurado o maven utiliza 
-			como default a versao 1.5 -->
 		<source.jdk.version>1.7</source.jdk.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>
 
 	<modules>

@@ -8,10 +8,10 @@
 		<artifactId>taskmanager</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>taskmanager-core</artifactId>
 	<packaging>jar</packaging>
-	
+
 	<name>taskmanager-core Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.1.6.RELEASE</version>
+			<version>${spring.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>4.1.6.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 
@@ -60,6 +60,13 @@
 			<version>1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.9.39</version>
+		</dependency>
+
+
 	</dependencies>
-	
+
 </project>

@@ -24,9 +24,6 @@ public class BioTask {
 
 	@Column(unique = true)
 	private String taskKey;
-	
-	@Column(nullable=false)
-	private String query;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_database")
@@ -51,18 +48,8 @@ public class BioTask {
 	@JoinColumn(name = "id_status")
 	private BioTaskStatus status;
 	
-	private String resourcePath;
+	private String pathInTheAlgorithm;
 	
-	private byte[] result;
-
-	public byte[] getResult() {
-		return result;
-	}
-
-	public void setResult(byte[] result) {
-		this.result = result;
-	}
-
 	public Integer getId() {
 		return id;
 	}
@@ -73,14 +60,6 @@ public class BioTask {
 
 	public String getTaskKey() {
 		return taskKey;
-	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
 	}
 
 	public BioAlgorithm getAlgorithm() {
@@ -113,12 +92,12 @@ public class BioTask {
 		taskKey = UUID.randomUUID().toString();
 	}
 
-	public String getResourcePath() {
-		return resourcePath;
+	public String getPathInTheAlgorithm() {
+		return pathInTheAlgorithm;
 	}
 
-	public void setResourcePath(String resourcePath) {
-		this.resourcePath = resourcePath;
+	public void setPathInTheAlgorithm(String resourcePath) {
+		this.pathInTheAlgorithm = resourcePath;
 	}
 
 }

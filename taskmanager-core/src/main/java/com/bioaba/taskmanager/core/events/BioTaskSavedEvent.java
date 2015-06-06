@@ -2,6 +2,7 @@ package com.bioaba.taskmanager.core.events;
 
 import org.springframework.context.ApplicationEvent;
 
+@SuppressWarnings("serial")
 public class BioTaskSavedEvent extends ApplicationEvent {
 
 	private String taskKey;
