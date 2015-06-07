@@ -56,10 +56,22 @@ public class BioTaskController extends AbstractCrudController<BioTask> {
 			@RequestPart(value = "query", required = false) String queryText,
 			@RequestPart(value = "task", required = true)  BioTask task) {
 		
-		if(queryFile != null)
-			facade.saveTask(task, queryFile);
-		else
-			facade.saveTask(task, queryText);
+		try{
+			byte[] bytearray;
+			
+			if(queryFile != null){
+				bytearray = queryFile.getBytes();
+			}
+			else{
+				bytearray = queryText.getBytes();
+			}
+			
+			facade.saveTask(task, bytearray);
+		}
+		catch(Exception ex){
+			
+		}
+		
 		return task;
 	}
 }

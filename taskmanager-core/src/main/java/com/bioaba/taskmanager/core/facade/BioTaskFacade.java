@@ -1,17 +1,11 @@
 package com.bioaba.taskmanager.core.facade;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.bioaba.taskmanager.core.events.BioTaskSavedEvent;
 import com.bioaba.taskmanager.core.facade.base.AbstractCrudFacade;
@@ -47,24 +41,12 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 		this.s3Service = new StorageAmazonS3();
 	}
 
-	public BioTask saveTask(BioTask entity, MultipartFile queryFile) {
+	public BioTask saveTask(BioTask entity, byte[] file) {
 		for (BioTaskParameter param : entity.getParameters())
 			taskParameterService.save(param);
 		super.save(entity);
 
-		s3Service.save(entity.getTaskKey(), queryFile, FileStoreType.QUERY);
-
-		eventPublisher.publishEvent(new BioTaskSavedEvent(this, entity
-				.getTaskKey()));
-		return entity;
-	}
-
-	public BioTask saveTask(BioTask entity, String queryText) {
-		for (BioTaskParameter param : entity.getParameters())
-			taskParameterService.save(param);
-		super.save(entity);
-
-		s3Service.save(entity.getTaskKey(), queryText, FileStoreType.QUERY);
+		s3Service.save(entity.getTaskKey(), file, FileStoreType.QUERY);
 
 		eventPublisher.publishEvent(new BioTaskSavedEvent(this, entity
 				.getTaskKey()));
@@ -93,33 +75,29 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 		return task;
 	}
 
-	private String readFile(File file, Charset encoding) throws IOException {
-		byte[] encoded = Files.readAllBytes(file.toPath());
-		return new String(encoded, encoding);
-	}
-
 	public String findResultByTaskKey(String taskKey) {
-		File resultFile = s3Service
-				.findByTaskKey(taskKey, FileStoreType.RESULT);
+		byte[] resultArray = s3Service.findByTaskKey(taskKey,
+				FileStoreType.RESULT);
 		String content = "";
-		try{
-			content = readFile(resultFile, Charset.defaultCharset());
-		}
-		catch (IOException ioe){
-			System.out.println("IO Error while extracting text from ResultFile.");
+		try {
+			content = new String(resultArray);
+		} catch (Exception ex) {
+			System.out.println("Error while extracting text from ResultFile.");
+			System.out.println(ex.toString());
 		}
 		return content;
 	}
 
 	public void runTask(String taskKey) {
 		BioTask task = taskService.findByTaskKey(taskKey);
-		File queryFile = s3Service.findByTaskKey(taskKey, FileStoreType.QUERY);
+		byte[] resultArray = s3Service.findByTaskKey(taskKey,
+				FileStoreType.QUERY);
 		String pathInTheAlgorithm = "";
 		if (task == null) {
 			System.out.println("Lançar erro 404");
 			return;
 		}
-		pathInTheAlgorithm = taskService.submitTask(task, queryFile);
+		pathInTheAlgorithm = taskService.submitTask(task, resultArray);
 		task.setPathInTheAlgorithm(pathInTheAlgorithm);
 
 		taskService.save(task);

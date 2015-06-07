@@ -1,6 +1,5 @@
 package com.bioaba.taskmanager.core.service.algorithmClients;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class Task {
 
 	private String algorithmName;
 	
-	private File query;
+	private byte[] query;
 
 	private List<AlgorithmParameter> parameters;
 
@@ -21,7 +20,7 @@ public class Task {
 	
 	private String callbackURL;
 
-	public Task(BioTask task, File queryFile, String callbackURL) {
+	public Task(BioTask task, byte[] queryFile, String callbackURL) {
 		this.algorithmName = task.getAlgorithm().getName();
 		this.query = queryFile;
 		this.parameters= new ArrayList<AlgorithmParameter>();
@@ -42,11 +41,11 @@ public class Task {
 		this.algorithmName = algorithmName;
 	}
 
-	public File getQuery() {
+	public byte[] getQuery() {
 		return query;
 	}
 
-	public void setQuery(File query) {
+	public void setQuery(byte[] query) {
 		this.query = query;
 	}
 
