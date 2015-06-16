@@ -34,7 +34,7 @@ public class BioTaskController extends AbstractCrudController<BioTask> {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	public void test(Exception ex) {
-		ex.toString();
+		System.out.println(ex.toString());
 	}
 
 	@RequestMapping(value="/{taskKey}", method = RequestMethod.GET)

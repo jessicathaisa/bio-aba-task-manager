@@ -1,7 +1,11 @@
 package com.bioaba.taskmanager.core.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -9,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.bioaba.taskmanager.core.service.algorithmClients.AlgorithmParameter;
 import com.bioaba.taskmanager.core.service.algorithmClients.Task;
 import com.bioaba.taskmanager.core.service.base.AbstractCrudService;
 import com.bioaba.taskmanager.persistence.entity.BioTask;
@@ -37,16 +42,19 @@ public class BioTaskService extends AbstractCrudService<BioTask> {
 		String taskPath = "";
 		try {
 			String URL = biotask.getAlgorithm().getUrl() + "/tasks";
-			MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
-			parts.add("algorithmName", task.getAlgorithmName());
-			parts.add("parameters", task.getParameters());
-			parts.add("databaseName", task.getDatabaseName());
-			parts.add("databaseURL", task.getDatabaseURL());
-			parts.add("callbackURL", task.getCallbackURL());
-			parts.add("query", task.getQuery());
+			Map<String, Object> parts = new HashMap<String, Object>();
+			parts.put("algorithmName", task.getAlgorithmName());
+			Map<String, String> params = new HashMap();
+			for(AlgorithmParameter alg : task.getParameters())
+				params.put(alg.getParamName(), alg.getParamValue());
+			parts.put("parameters", params);
+			parts.put("taskKey", biotask.getTaskKey());
+			parts.put("databaseName", task.getDatabaseName());
+			parts.put("databaseURL", task.getDatabaseURL());
+			parts.put("callbackURL", task.getCallbackURL());
+			parts.put("query", Base64.encodeBase64(task.getQuery()));
 
-			ResponseEntity<Void> response = restTemplate.postForEntity(URL,
-					parts, Void.class);
+			ResponseEntity<Void> response = restTemplate.postForEntity(URL, parts, Void.class);
 
 			taskPath = response.getHeaders().get("Location").get(0);
 		} catch (ArrayIndexOutOfBoundsException ex) {
@@ -56,6 +64,6 @@ public class BioTaskService extends AbstractCrudService<BioTask> {
 		}
 
 		return taskPath;
-	}
+	}	
 
 }
