@@ -1,5 +1,8 @@
 package com.bioaba.taskmanager.web.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.springframework.http.HttpStatus;
@@ -34,10 +37,14 @@ public class BioTaskResultController extends AbstractCrudController<BioTask> {
 		ex.toString();
 	}
 
-	@RequestMapping(value="/{taskKey}", method = RequestMethod.GET)
+	@RequestMapping(value="/{taskKey}", method = RequestMethod.GET, produces= "application/json")
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody String getOne(@PathVariable("taskKey") String taskKey) {
-		return facade.findResultByTaskKey(taskKey);
+	public @ResponseBody Map<String, String> getOne(@PathVariable("taskKey") String taskKey) {
+		Map<String, String> result = new HashMap<String, String>();
+		String resultasd = facade.findResultByTaskKey(taskKey);
+		
+		result.put("result", resultasd);
+		return result;
 	}
 	
 }

@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -44,7 +45,7 @@ public class BioTask {
 		this.parameters = parameters;
 	}
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne()
 	@JoinColumn(name = "id_status")
 	private BioTaskStatus status;
 	

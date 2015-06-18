@@ -4,10 +4,8 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import com.bioaba.taskmanager.core.events.BioTaskSavedEvent;
 import com.bioaba.taskmanager.core.facade.base.AbstractCrudFacade;
 import com.bioaba.taskmanager.core.service.BioTaskParameterService;
 import com.bioaba.taskmanager.core.service.BioTaskService;
@@ -31,9 +29,6 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 
 	private StorageAmazonS3 s3Service;
 
-	@Inject
-	private ApplicationEventPublisher eventPublisher;
-
 	@Autowired
 	public BioTaskFacade(BioTaskService taskService) {
 		super(taskService);
@@ -48,12 +43,11 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 
 		s3Service.save(entity.getTaskKey(), file, FileStoreType.QUERY);
 
-		eventPublisher.publishEvent(new BioTaskSavedEvent(this, entity
-				.getTaskKey()));
 		return entity;
 	}
 
-	public void updateTaskStatusByTaskKey(String taskKey, String taskStatusName) {
+
+	public void updateTaskStatusByTaskKey(String taskKey, String taskStatusName, byte[] result) {
 		BioTask biotask = taskService.findByTaskKey(taskKey);
 		if (biotask == null) {
 			System.out.println("Lançar erro 404");
@@ -65,6 +59,8 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 			System.out.println("Lançar erro 404 também?");
 			return;
 		}
+
+		s3Service.save(taskKey, result, FileStoreType.RESULT);
 
 		biotask.setStatus(taskStatus);
 		taskService.save(biotask);

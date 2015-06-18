@@ -1,7 +1,11 @@
 package com.bioaba.taskmanager.web.controller;
 
+import java.util.Base64;
+import java.util.Map;
+
 import javax.inject.Inject;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bioaba.taskmanager.core.events.BioTaskSavedEvent;
 import com.bioaba.taskmanager.core.facade.BioTaskFacade;
 import com.bioaba.taskmanager.persistence.entity.BioTask;
 import com.bioaba.taskmanager.web.controller.base.AbstractCrudController;
@@ -24,6 +29,9 @@ import com.bioaba.taskmanager.web.validation.BioTaskValidator;
 public class BioTaskController extends AbstractCrudController<BioTask> {
 
 	private BioTaskFacade facade;
+
+	@Inject
+	private ApplicationEventPublisher eventPublisher;
 	
 	@Inject
 	public BioTaskController(BioTaskFacade facade, BioTaskValidator validator) {
@@ -45,8 +53,10 @@ public class BioTaskController extends AbstractCrudController<BioTask> {
 
 	@RequestMapping(value="/{taskKey}", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
-	public void update(@PathVariable("taskKey") String taskKey, @RequestBody String taskStatus) {
-		facade.updateTaskStatusByTaskKey(taskKey, taskStatus);
+	public void update(@PathVariable("taskKey") String taskKey, @RequestBody Map<String, String> map) {
+		String result = (String) map.get("result");
+		String taskStatus = (String) map.get("status");
+		facade.updateTaskStatusByTaskKey(taskKey, taskStatus, Base64.getDecoder().decode(result));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -65,8 +75,12 @@ public class BioTaskController extends AbstractCrudController<BioTask> {
 			else{
 				bytearray = queryText.getBytes();
 			}
-			
+
 			facade.saveTask(task, bytearray);
+			
+
+			eventPublisher.publishEvent(new BioTaskSavedEvent(this, task
+					.getTaskKey()));
 		}
 		catch(Exception ex){
 			

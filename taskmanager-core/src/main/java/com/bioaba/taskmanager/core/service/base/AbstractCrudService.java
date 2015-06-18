@@ -21,7 +21,7 @@ public abstract class AbstractCrudService<T> {
 	}
 
 	public T save( T entity){
-		repository.save(entity);
+		repository.saveAndFlush(entity);
 		return entity;
 	}
 }
