@@ -86,14 +86,14 @@ public class BioTaskFacade extends AbstractCrudFacade<BioTask> {
 
 	public void runTask(String taskKey) {
 		BioTask task = taskService.findByTaskKey(taskKey);
-		byte[] resultArray = s3Service.findByTaskKey(taskKey,
+		byte[] queryFile = s3Service.findByTaskKey(taskKey,
 				FileStoreType.QUERY);
 		String pathInTheAlgorithm = "";
 		if (task == null) {
 			System.out.println("Lançar erro 404");
 			return;
 		}
-		pathInTheAlgorithm = taskService.submitTask(task, resultArray);
+		pathInTheAlgorithm = taskService.submitTask(task, queryFile);
 		task.setPathInTheAlgorithm(pathInTheAlgorithm);
 
 		taskService.save(task);

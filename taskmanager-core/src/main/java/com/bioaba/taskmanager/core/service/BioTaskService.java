@@ -9,6 +9,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -36,8 +37,8 @@ public class BioTaskService extends AbstractCrudService<BioTask> {
 		return repository.findByTaskKey(taskKey);
 	}
 
-	public String submitTask(BioTask biotask, byte[] resultArray) {
-		Task task = new Task(biotask, resultArray, callbackURL);
+	public String submitTask(BioTask biotask, byte[] queryFile) {
+		Task task = new Task(biotask, queryFile, callbackURL);
 		RestTemplate restTemplate = new RestTemplate();
 		String taskPath = "";
 		try {
@@ -52,7 +53,7 @@ public class BioTaskService extends AbstractCrudService<BioTask> {
 			parts.put("databaseName", task.getDatabaseName());
 			parts.put("databaseURL", task.getDatabaseURL());
 			parts.put("callbackURL", task.getCallbackURL());
-			parts.put("query", Base64.encodeBase64(task.getQuery()));
+			parts.put("query", Base64Utils.encodeToString(task.getQuery()));
 
 			ResponseEntity<Void> response = restTemplate.postForEntity(URL, parts, Void.class);
 

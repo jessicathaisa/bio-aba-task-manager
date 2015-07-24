@@ -42,7 +42,8 @@ public class BioTaskResultController extends AbstractCrudController<BioTask> {
 	public @ResponseBody Map<String, String> getOne(@PathVariable("taskKey") String taskKey) {
 		Map<String, String> result = new HashMap<String, String>();
 		String resultasd = facade.findResultByTaskKey(taskKey);
-		
+
+		result.put("status", facade.findByTaskKey(taskKey).getStatus().getName());
 		result.put("result", resultasd);
 		return result;
 	}
