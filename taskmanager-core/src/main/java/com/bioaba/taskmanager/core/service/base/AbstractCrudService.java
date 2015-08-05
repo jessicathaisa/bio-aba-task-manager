@@ -24,4 +24,12 @@ public abstract class AbstractCrudService<T> {
 		repository.saveAndFlush(entity);
 		return entity;
 	}
+	
+	public void delete(T entity){
+		repository.delete(entity);
+	}
+	
+	public void delete(Long entity){
+		repository.delete(entity);
+	}
 }

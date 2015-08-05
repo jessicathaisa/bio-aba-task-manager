@@ -26,7 +26,7 @@ import com.bioaba.taskmanager.web.validation.BioTaskValidator;
 
 @ControllerAdvice
 @RequestMapping("/biotask")
-public class BioTaskController extends AbstractCrudController<BioTask> {
+public class BioTaskController {
 
 	private BioTaskFacade facade;
 
@@ -35,7 +35,6 @@ public class BioTaskController extends AbstractCrudController<BioTask> {
 	
 	@Inject
 	public BioTaskController(BioTaskFacade facade, BioTaskValidator validator) {
-		super(facade, validator);
 		this.facade = facade;
 	}
 	

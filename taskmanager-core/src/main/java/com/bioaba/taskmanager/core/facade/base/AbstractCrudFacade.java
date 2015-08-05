@@ -19,4 +19,12 @@ public class AbstractCrudFacade<T> {
 		abstractCrud.save(entity);
 		return entity;
 	}
+	
+	public void delete (T entity){
+		abstractCrud.delete(entity);
+	}
+	
+	public void delete (Long entity){
+		abstractCrud.delete(entity);
+	}
 }
